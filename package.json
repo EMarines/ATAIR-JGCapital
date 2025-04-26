@@ -11,7 +11,7 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "prettier --write .",
 		"lint": "prettier --check . && eslint .",
-		"vercel-build": "svelte-kit sync && vite build"
+		"vercel-build": "echo \"VITE_FIREBASE_API_KEY=AIzaSyBgaVo-bSos2GjBjds1hePHkz6GAGHQFus\nVITE_FIREBASE_AUTH_DOMAIN=jgcapital-bbfcf.firebaseapp.com\nVITE_FIREBASE_PROJECT_ID=jgcapital-bbfcf\nVITE_FIREBASE_STORAGE_BUCKET=jgcapital-bbfcf.firebasestorage.app\nVITE_FIREBASE_MESSAGING_SENDER_ID=834626798641\nVITE_FIREBASE_APP_ID=1:834626798641:web:fbd4818c82ab2f02588110\nVITE_FIREBASE_DATA_BASE_URL=https://jgcapital-bbfcf.firebaseio.com\" > .env.local && svelte-kit sync && vite build"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.3",

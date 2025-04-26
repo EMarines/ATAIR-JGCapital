@@ -1,6 +1,16 @@
 {
   "version": 2,
   "framework": "sveltekit",
+  "buildCommand": "npm run vercel-build",
+  "installCommand": "npm install",
+  "outputDirectory": ".vercel/output",
+  "devCommand": "npm run dev",
+  "ignoreCommand": "npm run check",
+  "git": {
+    "deploymentEnabled": {
+      "main": true
+    }
+  },
   "headers": [
     {
       "source": "/(.*)",

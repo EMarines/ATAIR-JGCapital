@@ -65,7 +65,7 @@
 
 <nav>
   <div class="container">
-      <h1 class="title">MatchHome</h1>  
+      <h1 class="title">JGCapital</h1>  
       <button 
         class="nav__target" 
         on:click={toggleMenu}

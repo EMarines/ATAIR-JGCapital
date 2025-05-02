@@ -51,17 +51,15 @@ try {
     
     // Usar variables de entorno directamente desde import.meta.env (compatible con Vite)
     // en lugar de $env/static/public que puede dar problemas
-        // Usar variables de entorno directamente desde import.meta.env (compatible con Vite)
-        const firebaseConfig = {
-            // Si falta la configuración principal, usar la de prueba
-            apiKey: import.meta.env.VITE_FIREBASE_API_KEY || import.meta.env.VITE_TEST_FIREBASE_API_KEY,
-            authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || import.meta.env.VITE_TEST_FIREBASE_AUTH_DOMAIN,
-            projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || import.meta.env.VITE_TEST_FIREBASE_PROJECT_ID,
-            databaseURL: import.meta.env.VITE_FIREBASE_DATA_BASE_URL || import.meta.env.VITE_TEST_FIREBASE_DATA_BASE_URL,
-            storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || import.meta.env.VITE_TEST_FIREBASE_STORAGE_BUCKET,
-            messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || import.meta.env.VITE_TEST_FIREBASE_MESSAGING_SENDER_ID,
-            appId: import.meta.env.VITE_FIREBASE_APP_ID || import.meta.env.VITE_TEST_FIREBASE_APP_ID
-        };
+    const firebaseConfig = {
+        apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+        authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+        projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+        databaseURL: import.meta.env.VITE_FIREBASE_DATA_BASE_URL,
+        storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+        messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+        appId: import.meta.env.VITE_FIREBASE_APP_ID
+    };
 
     // Log importante para verificación de dominios autorizados en Firebase
     console.log('IMPORTANTE: Verifica que el dominio actual esté autorizado en Firebase Authentication');

@@ -8,10 +8,10 @@
             <div class="footer__section">
                 <h3>Contacto</h3>
                 <p>Ave. Francisco Villa # 5700</p>
-                <p>Email: jgcapitalbienes@hotmail.com</p>
-                <p>Tel: (614) 163-6322</p>
+                <p>Email: matchhome@hotmail.com</p>
+                <p>Tel: (614) 540-4003</p>
             </div>
-            <p class="slogan">Seguridad Confianza en Bienes Raíces</p>
+            <p class="slogan">Tu patrimonio en buenas manos</p>
             <div class="footer__section">
                 <h3>Sistema ATAIR</h3>
                 <p>Sistema de gestión inmobiliaria</p>

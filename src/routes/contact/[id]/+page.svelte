@@ -1,10 +1,11 @@
 <script lang="ts">
   import {db, auth} from '$lib/firebase'; // Import the default export
+  import { doc, deleteDoc } from 'firebase/firestore';
   import { goto } from '$app/navigation';
   import type { Contact, Binnacle, Property } from '$lib/types';
   import { contactsStore, propertiesStore, systStatus, binnaclesStore, property as propertyStore } from '$lib/stores/dataStore';
   import { onMount, onDestroy } from 'svelte';
-  import { AddToShedule, CardBinnacle, CardProperty, Search } from '$components';
+  import { AddToSchedule, CardBinnacle, CardProperty, Search } from '$components';
   import AddContact from '$lib/components/AddContact.svelte';
 
   import { formatDate, toComaSep, toTele, infoToBinnacle, findPropertiesForContact, sendWhatsApp, sortBinnacle } from '$lib/functions';
@@ -94,15 +95,12 @@
 
     if (confirm("¿Deseas eliminar definitivamente al contacto?")) {
         try {
-            
-            // Eliminar de Firebase
-            const result = await db.delete("contacts", contactId);
-            if (result?.success) {
-                goto("/contacts");
-            } else {
-                console.error("Error al eliminar el contacto:", result?.error);
-                alert("Error al eliminar el contacto: " + (result?.error || "Error desconocido"));
-            }
+            // Crear referencia al documento
+            const contactRef = doc(db, "contacts", contactId);
+            // Eliminar de Firebase usando deleteDoc
+            await deleteDoc(contactRef);
+            // Si deleteDoc no lanza error, la eliminación fue exitosa
+            goto("/contacts");
         } catch (error) {
             console.error("Error al eliminar el contacto:", error);
             alert("Error al eliminar el contacto: " + error);
@@ -204,7 +202,7 @@
           binnacle = {"date": Date.now(), "comment": (property.public_id), "to": contact.id, "action": "Propiedad enviada: "}
           infoToBinnacle(binnacle)
           $systStatus = "msgGratitude";
-          commInpuyBinnacle = "Gracias por contactarnos. Enrique Marines, asesor de ventas en Match Home, tel. 614 540 4003, email matchhome@hotmail.com ✔ Visita matchhome.net ✔ ¡Seguro encuentras algo de interés!";
+          commInpuyBinnacle = "Gracias por contactarnos. Julio Marines, asesor de ventas en JGCapital, tel. 614 163 6322, email jgcapitalbienes@hotmail.com ✔ Visita matchhome.net ✔ ¡Seguro encuentras algo de interés!";
       // Envia mensaje de agradecimiento después de enviar la propiedad en alta de contacto
       } else if($systStatus === "msgGratitude") {
         // Envía en mensaje de agradecimiento
@@ -448,7 +446,7 @@
             {/if} 
 
             {#if isActivated}
-              <AddToShedule {contact} on:closeIt = {close} />
+              <AddToSchedule {contact} on:closeIt = {close} />
             {/if}
                 
             <!-- Botonies enviar WA o guardar nota para bitácora -->              

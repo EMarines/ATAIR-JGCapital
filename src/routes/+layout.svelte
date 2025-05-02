@@ -7,9 +7,9 @@
   import type { QuerySnapshot, DocumentData } from 'firebase/firestore';
   import { contactsStore, binnaclesStore, propertiesStore } from '$lib/stores/dataStore';
   import type { Contact, Binnacle, Property } from '$lib/types';
-  import Navbar from '$lib/components/Navbar.svelte';
-  import Footer from '$lib/components/Footer.svelte';
+  import {Navbar, Footer} from '$components';
   import NotificationContainer from '$lib/components/NotificationContainer.svelte';
+  // import Footer from '$lib/components/Footer.svelte';
   // import { initSyncListeners } from '$lib/services/syncService';
 
   // const { isAuthenticated, checkAuth } = useAuth();
@@ -154,12 +154,14 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    overflow-x: hidden; /* Prevenir scroll horizontal */
   }
 
   main {
     flex: 1;
     position: relative;
     z-index: 2;
+    width: 100%; /* Asegurar que main ocupe exactamente el ancho disponible */
   }
   
   /* Removed the footer-container div as it's not needed */

@@ -1,17 +1,21 @@
 <script lang="ts">
     import "../../styles/main.css"
-    import logo from '../images/logo.png'
+    // No necesitas importar archivos de la carpeta static, solo usa la ruta directa
+    // import logo from '../../../static/logo.png'
+    import { empresa } from '$lib/types';
 </script>
+
 
 <div class="hero">
     <div class="container">
         <div class="header cabezal">
             <div class="logo">
-                <img src={logo} alt="Match Home">
+                <!-- Usar la ruta directa desde la raíz del sitio -->
+                <img src="/logo.svg" alt="{empresa.companyName}">
             </div>
             <div class="marca">
-                <h1 class="title">Match Home</h1>
-                <h5 class="slogan">¡Tu Patrimnio En Buenas Manos!</h5>
+                <h1 class="title">{empresa.companyName}</h1>
+                <h5 class="slogan">{empresa.slogan}</h5>
             </div>
 
         </div>

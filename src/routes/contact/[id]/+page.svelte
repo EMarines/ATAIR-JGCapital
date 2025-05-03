@@ -7,9 +7,8 @@
   import { onMount, onDestroy } from 'svelte';
   import { AddToSchedule, CardBinnacle, CardProperty, Search } from '$components';
   import AddContact from '$lib/components/AddContact.svelte';
-
   import { formatDate, toComaSep, toTele, infoToBinnacle, findPropertiesForContact, sendWhatsApp, sortBinnacle } from '$lib/functions';
-
+  import { empresa } from '$lib/types'
 
   export let data;
 
@@ -166,7 +165,7 @@
           if (selectedProperty) {
             // Si la propiedad tiene public_url, usarla directamente
             if (selectedProperty && selectedProperty.public_url) {
-              commInpuyBinnacle = selectedProperty.public_url.replace("easybroker.com/mx/listings", "jgcapital.easybroker.com/property");
+              commInpuyBinnacle = selectedProperty.public_url;
               foundProperty = true;
             } 
             // // Si no tiene public_url pero tiene public_id, generar la URL
@@ -202,7 +201,7 @@
           binnacle = {"date": Date.now(), "comment": (property.public_id), "to": contact.id, "action": "Propiedad enviada: "}
           infoToBinnacle(binnacle)
           $systStatus = "msgGratitude";
-          commInpuyBinnacle = "Gracias por contactarnos. Julio Marines, asesor de ventas en JGCapital, tel. 614 163 6322, email jgcapitalbienes@hotmail.com ✔ Visita jgcapital. ✔ ¡Seguro encuentras algo de interés!";
+          commInpuyBinnacle = `Gracias por contactarnos. Enrique Marines, asesor de ventas en ${empresa.companyName}}, tel. ${empresa.phoneNumber}}, email ${empresa.email}.} ✔ Visita matchhome.net ✔ ¡Seguro encuentras algo de interés!`;
       // Envia mensaje de agradecimiento después de enviar la propiedad en alta de contacto
       } else if($systStatus === "msgGratitude") {
         // Envía en mensaje de agradecimiento
@@ -304,7 +303,7 @@
     // Cargar la URL pública en el textarea
     // Prioridad 1: Usar la URL del contacto si existe
     if (property && property.public_url && $systStatus === "addContact") {
-      commInpuyBinnacle = property.public_url.replace("easybroker.com/mx/listings", "jgcapital.easybroker.com/property");    //https://jgcapital.easybroker.com/property/en-complejo-pirvado-casa-totalmente-amueblada-muy-cerntica?agent=juliom_2
+      commInpuyBinnacle = property.public_url;
       return;
     }
     
@@ -314,7 +313,7 @@
         
         // Si la propiedad tiene public_url, usarla directamente
         if (selectedProperty && selectedProperty.public_url && $systStatus === "addContact") {
-          // commInpuyBinnacle = selectedProperty.public_url.replace("easybroker.com/mx/listings", "jgcapital.easybroker.com/property");
+          commInpuyBinnacle = selectedProperty.public_url;
         } 
         // Si no tiene public_url pero tiene public_id, generar la URL
         // else if (selectedProperty.public_id) {
@@ -915,26 +914,5 @@
       }
          
     }
-/*     
-    .copy-button {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: #6b21a8;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-  
-    .copy-button:hover {
-      background: #8b5cf6;
-      transform: scale(1.05);
-    } */
+
 </style>

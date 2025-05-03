@@ -166,7 +166,7 @@
           if (selectedProperty) {
             // Si la propiedad tiene public_url, usarla directamente
             if (selectedProperty && selectedProperty.public_url) {
-              commInpuyBinnacle = selectedProperty.public_url.replace("easybroker.com/mx/listings", "matchhome.net/property");
+              commInpuyBinnacle = selectedProperty.public_url.replace("easybroker.com/mx/listings", "jgcapital.easybroker.com/property");
               foundProperty = true;
             } 
             // // Si no tiene public_url pero tiene public_id, generar la URL
@@ -202,7 +202,7 @@
           binnacle = {"date": Date.now(), "comment": (property.public_id), "to": contact.id, "action": "Propiedad enviada: "}
           infoToBinnacle(binnacle)
           $systStatus = "msgGratitude";
-          commInpuyBinnacle = "Gracias por contactarnos. Julio Marines, asesor de ventas en JGCapital, tel. 614 163 6322, email jgcapitalbienes@hotmail.com ✔ Visita matchhome.net ✔ ¡Seguro encuentras algo de interés!";
+          commInpuyBinnacle = "Gracias por contactarnos. Julio Marines, asesor de ventas en JGCapital, tel. 614 163 6322, email jgcapitalbienes@hotmail.com ✔ Visita jgcapital. ✔ ¡Seguro encuentras algo de interés!";
       // Envia mensaje de agradecimiento después de enviar la propiedad en alta de contacto
       } else if($systStatus === "msgGratitude") {
         // Envía en mensaje de agradecimiento
@@ -304,7 +304,7 @@
     // Cargar la URL pública en el textarea
     // Prioridad 1: Usar la URL del contacto si existe
     if (property && property.public_url && $systStatus === "addContact") {
-      commInpuyBinnacle = property.public_url.replace("easybroker.com/mx/listings", "matchhome.net/property");
+      commInpuyBinnacle = property.public_url.replace("easybroker.com/mx/listings", "jgcapital.easybroker.com/property");    //https://jgcapital.easybroker.com/property/en-complejo-pirvado-casa-totalmente-amueblada-muy-cerntica?agent=juliom_2
       return;
     }
     
@@ -314,7 +314,7 @@
         
         // Si la propiedad tiene public_url, usarla directamente
         if (selectedProperty && selectedProperty.public_url && $systStatus === "addContact") {
-          commInpuyBinnacle = selectedProperty.public_url.replace("easybroker.com/mx/listings", "matchhome.net/property");
+          // commInpuyBinnacle = selectedProperty.public_url.replace("easybroker.com/mx/listings", "jgcapital.easybroker.com/property");
         } 
         // Si no tiene public_url pero tiene public_id, generar la URL
         // else if (selectedProperty.public_id) {

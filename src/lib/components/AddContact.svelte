@@ -9,8 +9,6 @@
     import { convertOperationEbFb } from '$lib/functions/converterEb-Fb';
     import { onMount, onDestroy } from 'svelte';
     import { get } from 'svelte/store';
-    // Importar las funciones necesarias para sincronizar con Google
-    // import { syncContact, getAccessToken } from '$lib/services/googleService';
   
     const dispatch = createEventDispatcher<AddContactEvents>();
   
@@ -97,28 +95,28 @@
         erroresFormulario[field] = '';  
         switch(field) {
             case 'name':
-                if (!value?.trim()) {
+                if (!value || !value.trim()) {
                     erroresFormulario.name = 'El nombre es requerido';
                 } else if (value.length < 2) {
                     erroresFormulario.name = 'El nombre es muy corto';
                 }
                 break;
             case 'telephon':
-                if (!value?.trim()) {
+                if (!value || !value.trim()) {
                     erroresFormulario.telephon = 'El teléfono es requerido';
                 } else if (!PHONE_REGEX.test(value)) {
                     erroresFormulario.telephon = 'Formato de teléfono inválido';
                 }
                 break;
             case 'email':
-                if (!value?.trim()) {
+                if (!value || !value.trim()) {
                     erroresFormulario.email = 'El email es requerido';
                 } else if (!EMAIL_REGEX.test(value)) {
                     erroresFormulario.email = 'Email inválido';
                 }
                 break;
             case 'lastname':
-                if (!value?.trim()) {
+                if (!value || !value.trim()) {
                     erroresFormulario.lastname = 'El apellido es requerido';
                 } else if (value.length < 2) {
                     erroresFormulario.lastname = 'El apellido es muy corto';
@@ -129,7 +127,7 @@
     }
   
     async function handleSubmit() {
-        console.log($propertyStore, contact, "handleSubmit");
+        // console.log($propertyStore, contact, "handleSubmit");
         try {
             isSubmitting = true;
            
@@ -163,7 +161,7 @@
                 locaProperty: Array.isArray(contact.locaProperty) ? contact.locaProperty : [],
                 tagsProperty: Array.isArray(contact.tagsProperty) ? contact.tagsProperty : [],
                 modePay: contact.modePay || '',
-                typeContact: convertOperationEbFb($propertyStore.selecTO) || '',
+                typeContact: contact.typeContact || '',
                 // Propiedades opcionales - usar cadenas vacías para campos de texto
                 color: contact.color || '',
                 contactType: contact.contactType || '',
@@ -171,13 +169,15 @@
                 notes: contact.notes || '',
                 propCont: contact.propCont || '',
                 // selecTO: contact.selecTO || '',
-                selecTO: convertOperationEbFb($propertyStore.selecTO) || '',
+                // selecTO: convertOperationEbFb($propertyStore.selecTO) || '',
 
                 sendedProperties: Array.isArray(contact.sendedProperties) ? contact.sendedProperties : [],
                 title: contact.title || '',
                 typeOperation: contact.typeOperation || '',
                 typeProperty: contact.typeProperty || ''
             };
+            // console.log(cleanContactData.typeContact)
+
             
             // Añadir propiedades opcionales de tipo number solo si tienen un valor
             if (contact.lastContact) {
@@ -192,7 +192,7 @@
             if (!cleanContactData.id || cleanContactData.id.trim() === '') {
                 // Generar un ID único si no existe
                 cleanContactData.id = generateUUID();
-                console.log('Generando nuevo ID para el contacto:', cleanContactData.id);
+                // console.log('Generando nuevo ID para el contacto:', cleanContactData.id);
             }
   
             // Validación final del ID
@@ -206,7 +206,7 @@
                 cleanContactData.createdAt = Date.now();
             }
   
-            console.log('Guardando contacto con ID:', cleanContactData.id);
+            // console.log('Guardando contacto con ID:', cleanContactData.id);
             
             // Guardar el contacto en Firebase
             let result;
@@ -247,18 +247,18 @@
                 // Actualizar el store con la nueva lista
                 contactsStore.set([...currentContacts]);
                 
-                console.log('Contacto añadido/actualizado manualmente en el store:', cleanContactData);
+                // console.log('Contacto añadido/actualizado manualmente en el store:', cleanContactData);
             }
   
             // Emitir evento de éxito
             dispatch('success', { contact: cleanContactData });
             
             // Registrar el contacto guardado para depuración
-            console.log('Contacto guardado exitosamente:', cleanContactData);
+            // console.log('Contacto guardado exitosamente:', cleanContactData);
             
             // Verificar nuevamente que el ID sea válido antes de redirigir
             if (cleanContactData.id && cleanContactData.id.trim() !== '') {
-                console.log('ID válido para redirección:', cleanContactData.id);
+                // console.log('ID válido para redirección:', cleanContactData.id);
                 
                 // Establecer el estado del sistema para activar la sección de comentarios en la página de detalles
                 $systStatus = "addContact";
@@ -283,6 +283,7 @@
             errorMessage = `Error: ${errorMsg}`;
         } finally {
             isSubmitting = false;
+            // $systStatus = '';
             // contact.propCont = '';
             // contact.selecTP = '';
             // contact.rangeProp = '';
@@ -340,10 +341,10 @@
         }
     }
   
-    // Agregar esta función
-    const autofocus = (node: HTMLElement) => {
-        node.focus();
-    };
+    // // Agregar esta función
+    // const autofocus = (node: HTMLElement) => {
+    //     node.focus();
+    // };
   
     // Función reactiva que no hace nada con el footer
     $: {
@@ -371,7 +372,7 @@
                         identifier="name"
                         name="Nombre *" 
                         bind:value={contact.name}
-                        on:input={() => handleBlur('name')}
+                        on:blur={() => handleBlur('name')} 
                     />
                     {#if camposModificados.name && erroresFormulario.name}
                         <span class="field-error">{erroresFormulario.name}</span>
@@ -383,7 +384,7 @@
                         identifier="lastname" 
                         name="Apellido" 
                         bind:value={contact.lastname}
-                        on:blur={() => handleBlur('lastname')}
+                        on:blur={() => handleBlur('lastname')} 
                     />
                     {#if camposModificados.lastname && erroresFormulario.lastname}
                         <span class="field-error">{erroresFormulario.lastname}</span>
@@ -462,6 +463,7 @@
                                         onSelect={() => {
                                             contact.propCont = property.public_id;
                                             contact.selecTP = property.property_type || '';
+                                            contact.typeContact = convertOperationEbFb(property.selecTO) || '',
                                             contact.rangeProp = property.price 
                                                 ? ranPrice(property.price)
                                                 : '';
@@ -501,40 +503,32 @@
   
             {#if showAdditionalFields}
                 <div class="additional-fields">
-                    <table class="property-table">
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <InputOptions 
-                                        identificador="selecTP" 
-                                        name="Tipo de Propiedad" 
-                                        choices={typeProperties} 
-                                        value={contact.selecTP ? String(contact.selecTP) : ''}
-                                        on:change={(e) => contact.selecTP = e.detail}
-                                    />
-                                </td>
-                                <td>
-                                    <InputOptions 
-                                        identificador="modePay" 
-                                        name="Modo de Pago" 
-                                        choices={modePays} 
-                                        value={contact.modePay ? String(contact.modePay) : ''}
-                                        on:change={(e) => contact.modePay = e.detail}
-                                    />
-                                </td>
-                                <td>
-                                    <InputOptions 
-                                        identificador="contactStage" 
-                                        name="Etapa" 
-                                        choices={contStage} 
-                                        value={contact.contactStage ? String(contact.contactStage) : ''}
-                                        on:change={(e) => contact.contactStage = e.detail}
-                                    />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-  
+
+                    <div class="inp__lat">
+                        <InputOptions 
+                            identificador="selecTP" 
+                            name="Tipo de Propiedad" 
+                            choices={typeProperties} 
+                            value={contact.selecTP ? String(contact.selecTP) : ''}
+                            on:change={(e) => contact.selecTP = e.detail}
+                        />
+                    
+                        <InputOptions 
+                            identificador="modePay" 
+                            name="Modo de Pago" 
+                            choices={modePays} 
+                            value={contact.modePay ? String(contact.modePay) : ''}
+                            on:change={(e) => contact.modePay = e.detail}
+                        />
+                    
+                        <InputOptions 
+                            identificador="contactStage" 
+                            name="Etapa" 
+                            choices={contStage} 
+                            value={contact.contactStage ? String(contact.contactStage) : ''}
+                            on:change={(e) => contact.contactStage = e.detail}
+                        />
+                    </div>            
                     <div class="inp__lat">
                         <InputText 
                             identifier="budget" 
@@ -775,7 +769,7 @@
         z-index: 100;
     }
   
-    .property-table {
+    /* .property-table {
         width: 100%;
         border-collapse: separate;
         border-spacing: 10px 0;
@@ -786,7 +780,7 @@
         border: none;
         width: 33.33%;
         vertical-align: top;
-    }
+    } */
   
     :global(.property-table .in__sel) {
         width: 100%;
@@ -800,7 +794,7 @@
     }
   
     @media (max-width: 600px) {
-        .property-table, .property-table tbody, .property-table tr {
+        /* .property-table, .property-table tbody, .property-table tr {
             display: block;
             width: 100%;
         }
@@ -809,7 +803,7 @@
             display: block;
             width: 100%;
             margin-bottom: 10px;
-        }
+        } */
   
         .inp__lat {
             flex-direction: column;
@@ -822,4 +816,3 @@
         }
     }
   </style>
-  

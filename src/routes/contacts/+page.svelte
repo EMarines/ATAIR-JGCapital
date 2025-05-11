@@ -13,13 +13,18 @@
   let isLoading = false;
 
   // Función para normalizar el valor de la etapa a un número
-  function normalizeStage(stage: any): number {
+  function normalizeStage(stage: any): number | string {
+    // Si es "NA" (Not Active), devolver "NA"
+    if (typeof stage === 'string' && stage.toUpperCase() === 'NA') {
+      return 'NA';
+    }
+
     if (stage === undefined || stage === null || stage === 0) return 1;
     
     // Si ya es un número, devolver directamente
     if (typeof stage === 'number') {
       return stage <= 0 ? 1 : stage; // Si es 0 o negativo, devolver 1
-    }
+    } 
     
     // Si es una cadena, intentar convertir
     if (typeof stage === 'string') {
@@ -40,6 +45,7 @@
     
     return 1; // Valor por defecto
   }
+
 
   // Función para generar un UUID
   function generateUUID() {
@@ -100,26 +106,26 @@
       }
 
       // Verificar que el contacto tenga un ID válido
-      if (!cont.id || typeof cont.id !== 'string' || cont.id.trim() === '') {
-        console.error('Error: ID de contacto faltante o inválido', cont);
+    if (!cont.id || typeof cont.id !== 'string' || cont.id.trim() === '') {
+      console.error('Error: ID de contacto faltante o inválido', cont);
+      
+      // Si el contacto tiene un nombre, podemos intentar encontrarlo por nombre en el store
+      if (cont.name) {
+        console.log('Intentando recuperar el contacto por nombre:', cont.name);
         
-        // Si el contacto tiene un nombre, podemos intentar encontrarlo por nombre en el store
-        if (cont.name) {
-          console.log('Intentando recuperar el contacto por nombre:', cont.name);
-          
-          // Buscar el contacto en el store por nombre y otros datos
-          const matchingContact = $contactsStore.find(c => 
-            c.id && c.id.trim() !== '' && 
-            c.name === cont.name && 
-            c.telephon === cont.telephon
-          );
-          
-          if (matchingContact && matchingContact.id) {
-            console.log('Contacto recuperado con ID:', matchingContact.id);
-            goto(`/contact/${matchingContact.id}`);
-            return;
-          }
+        // Buscar el contacto en el store por nombre y otros datos
+        const matchingContact = $contactsStore.find(c => 
+          c.id && c.id.trim() !== '' && 
+          c.name === cont.name && 
+          c.telephon === cont.telephon
+        );
+        
+        if (matchingContact && matchingContact.id) {
+          console.log('Contacto recuperado con ID:', matchingContact.id);
+          goto(`/contact/${matchingContact.id}`);
+          return;
         }
+      }
         
         // Si no se pudo recuperar, mostrar mensaje y no navegar
         alert('No se puede acceder a este contacto porque tiene un ID inválido. Por favor, cree un nuevo contacto.');
@@ -210,26 +216,37 @@
                 }
               }}
             >
-              <!-- Etapa del contacto - Siempre mostrar, con E1 por defecto -->
-              <div class="stage-indicator" style="position: absolute; top: 5px; right: 5px; width: 30px; height: 30px; border-radius: 50%; background-color: {
-                (() => {
-                  const stage = normalizeStage(cont.contactStage);
-                  switch(stage) {
-                    case 2: return '#ff8844';
-                    case 3: return '#ffcc44';
-                    case 4: return '#44cc44';
-                    case 5: return '#8844cc';
-                    default: return '#ff4444'; // E1 por defecto
-                  }
-                })()
-              }; display: flex; align-items: center; justify-content: center; color: white; font-weight: 500; font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.85rem; letter-spacing: 0.5px; z-index: 9999; box-shadow: 0 2px 5px rgba(0,0,0,0.3); border: 2px solid white;">
-                {
-                  (() => {
-                    const stage = normalizeStage(cont.contactStage);
-                    return `E${stage}`;
-                  })()
-                }
-              </div>
+
+<!-- Etapa del contacto - Siempre mostrar, con E1 por defecto -->
+<div class="stage-indicator" style="position: absolute; top: 5px; right: 5px; width: 30px; height: 30px; border-radius: 50%; background-color: {
+  (() => {
+    const normalizedStage = normalizeStage(cont.contactStage);
+    if (normalizedStage === 'NA') {
+      return '#808080'; // Gris para NA, por ejemplo
+    }
+    // Si es un número, procede como antes
+    switch(normalizedStage) {
+      case 2: return '#ff8844'; // Naranja
+      case 3: return '#ffcc44'; // Amarillo
+      case 4: return '#44cc44'; // Verde
+      case 5: return '#8844cc'; // Púrpura
+      default: return '#ff4444'; // Rojo para E1 o desconocido
+    }
+  })()
+}; display: flex; align-items: center; justify-content: center; color: white; font-weight: 500; font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.85rem; letter-spacing: 0.5px; z-index: 9999; box-shadow: 0 2px 5px rgba(0,0,0,0.3); border: 2px solid white;">
+  {
+    (() => {
+      const normalizedStage = normalizeStage(cont.contactStage);
+      if (normalizedStage === 'NA') {
+        return 'NA';
+      }
+      // Si es un número, muestra "E" seguido del número
+      return `E${normalizedStage}`;
+    })()
+  }
+</div>
+
+
               <CardContact {cont} />
             </div>
           {/each}

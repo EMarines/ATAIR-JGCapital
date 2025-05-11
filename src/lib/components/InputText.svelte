@@ -1,106 +1,79 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
-	
-	export let identifier: string;
-	export let name: string;  
-	export let value: string;
-	
-	const dispatch = createEventDispatcher<{
-		blur: { value: string },
-		input: { value: string }
-	}>();
-	
-	function handleBlur(e: Event) {
-		const target = e.target as HTMLInputElement;
-		dispatch('blur', { value: target.value });
-	}
-	
-	function handleInput(e: Event) {
-		const target = e.target as HTMLInputElement;
-		dispatch('input', { value: target.value });
-	}
+  import { createEventDispatcher, onMount } from 'svelte';
+  export let value: number | string | undefined = undefined; // El valor numérico real
+  export let identifier: string;
+  export let name: string;
+  export let placeholder: string = ''; 
+
+  const dispatch = createEventDispatcher();
+  let displayValue: string = ''; // Lo que se muestra en el input
+
+  // Actualizar las funciones para manejar ambos tipos de datos
+  function formatNumberWithCommas(num: number | string | undefined | null): string {
+    if (num === undefined || num === null || isNaN(Number(num))) {
+      return '';
+    }
+    return Number(num).toLocaleString('en-US');
+  }
+
+  function parseFormattedNumber(str: string): number | string | undefined {
+    if (!str) {
+      return undefined;
+    }
+    const cleanedString = str.replace(/[^0-9]/g, ''); // Solo dígitos
+    if (cleanedString === '') {
+      return undefined;
+    }
+    const num = Number(cleanedString);
+    return isNaN(num) ? undefined : num;
+  }
+
+  // Ajustar la lógica para evitar que `0` se muestre por defecto
+  $: displayValue = value !== undefined && value !== null && value !== '' ? String(value) : ''; // Asegurar que displayValue refleje siempre el valor actual
+  
+  // Inicializar displayValue cuando el componente se monta,
+  // en caso de que 'value' tenga un valor inicial.
+  // onMount(() => {
+  //   displayValue = formatNumberWithCommas(value);
+  // });
+
+  // Revisar y ajustar el evento `on:input` para evitar conflictos
+  function handleInput(event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    const currentRawInputValue = inputElement.value;
+
+    // Actualizar displayValue directamente para reflejar el texto ingresado
+    displayValue = currentRawInputValue;
+
+    // Actualizar `value` solo si cambia
+    if (value !== currentRawInputValue) {
+      value = currentRawInputValue;
+      dispatch('input', value);
+      dispatch('change', value);
+    }
+  }
+
+  function handleBlur() {
+    // Validar y limpiar el valor al salir del campo
+    if (value === undefined || value === null || value === '') {
+      displayValue = ''; // Mostrar vacío si no hay valor
+    } else {
+      displayValue = String(value).trim(); // Asegurar que el valor sea una cadena limpia
+    }
+    dispatch('blur', value);
+  }
+
 </script>
 
-    <label class="label__title" for={identifier} >
-      <p class={value  ? ' above' : ' center'}>{name}</p>
-      <input 
-        id={identifier} 
-        class="in__sel capitalize" 
-        type="text" 
-        bind:value 
-        placeholder={name}
-        on:blur={handleBlur}
-        on:input={handleInput} 
-      />
-    </label>
-
-    <style>
-    /* inputs dessigns   */
-    .above, .center {
-      position: absolute;
-      transform: translateY(-50%);
-      min-width: 150px;
-      pointer-events: none;
-      border-radius: 4px;
-      padding: 0 6px;
-      font-size: .8em;
-    }
-
-    .above {
-      top: 0;
-      left: 24px;
-      color: whitesmoke;
-      background: navy;
-      border: 1px solid blue;
-      font-size: .7em;
-    }
-
-    .center {
-      top: 50%;
-      left: 6px;
-      border: 1px solid transparent;
-      opacity: 0;
-    }
-
-    .label__title {
-      position: relative; 
-      border: 1px solid navy;
-      border-radius: 5px;
-      padding: 5px 3px 7px 3px;
-    }
-
-    .in__sel {  
-      padding: 3px 0 3px 5px;
-      width: 250px;
-      border-color: 2px solid blue;
-      border-radius: 8px;
-      font-size: .8em;
-      padding: 3px;
-      font-weight: 600;
-      color: darkblue;    
-      }
-
-
-      input::placeholder{
-        color: navy;
-      }
-
-      .capitalize {
-        text-transform: capitalize;
-      }
-
-    /* Quita las flechas en Chrome, Safari, Edge, Opera */
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-
-    /* Quita las flechas en Firefox */
-    /*
-    input[type="number"] {
-      -moz-appearance: textfield;
-      appearance: textfield;
-    }
-    */
-    </style>
+<label class="label__title" for={identifier} >
+  <p class={value ? ' above' : ' center'}>{name}</p>
+  <input 
+    id={identifier} 
+    class="in__sel"  
+    type="text" 
+    value={displayValue} 
+    placeholder={placeholder || name} 
+    on:input={handleInput}
+    on:blur={handleBlur}
+  />
+</label>

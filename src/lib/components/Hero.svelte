@@ -1,17 +1,18 @@
 <script lang="ts">
     import "../../styles/main.css"
-    // No necesitas importar archivos de la carpeta static, solo usa la ruta directa
-    // import logo from '../../../static/logo.png'
-    import { empresa } from '$lib/types';
+    import { empresa } from '$lib/config/empresa';
+    
+    // Eliminar la importación de logo-slogan.png
+    // Solo necesitamos base para construir la ruta a static
+    import { base } from '$app/paths';
 </script>
-
 
 <div class="hero">
     <div class="container">
         <div class="header cabezal">
             <div class="logo">
-                <!-- Usar la ruta directa desde la raíz del sitio -->
-                <img src="/logo.svg" alt="{empresa.companyName}">
+                <!-- Solo usar la ruta con base que apunta a static -->
+                <img src="{base}/logo-slogan.png" alt="{empresa.companyName}">
             </div>
             <div class="marca">
                 <h1 class="title">{empresa.companyName}</h1>

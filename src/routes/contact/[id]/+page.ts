@@ -1,7 +1,7 @@
 import type { PageLoad } from './$types';
 import { db } from '$lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import { redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 
 export const load: PageLoad = async ({ params }) => {
     try {

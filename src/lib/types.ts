@@ -124,7 +124,7 @@ export interface Property {
   agent: string,
   bathrooms: number,
   bedrooms: number,
-  // budget: number,
+  budget: number,
   construction_size: number,
   created_at: number,
   description: string,
@@ -137,6 +137,8 @@ export interface Property {
   property_type: string,
   public_id: string,
   public_url: string,
+  range: string,
+  selecMC: string,
   selecTO: string,
   selecTP: string,
   tags: string[],
@@ -216,28 +218,28 @@ export interface ConfiguracionEmpresa {
   };
 }
 
+// // Exportar directamente el objeto de configuración
+// export const empresa: ConfiguracionEmpresa = {
+//   "companyName": "Match Home",
+//   "logoUrl": "/logos/matchhome-logo.png",
+//   "faviconUrl": "/favicon-matchhome.png",
+//   "slogan": "¡Tu Patrimonio en Buenas Manos!",
+//   "agentName": "Enrique Marines",
+//   "companyUrl": "https://www.matchhome.net/",
+//   "phoneNumber": "(614) 540 4003",
+//   "whatsapp": "(614) 540 4003",
+//   "email": "matchhome@hotmail.com",
+//   "address": {
+//     "street": "Ave. Francisco Villa # 5700",
+//     "city": "Chihuahua",
+//     "state": "Chih.",
+//     "zipCode": "61203",
+//     "country": "México"
+//   },
+//   "socialMedia": {
+//     "facebook": "https://www.facebook.com/matchhomemx",
+//     "instagram": "https://www.instagram.com/matchhomemx",
+//     "linkedin": "https://www.linkedin.com/company/match-home"
+//   }
+// };
 
-// Exportar directamente el objeto de configuración
-export const empresa: ConfiguracionEmpresa = {
-  "companyName": "JGCapital",
-  "logoUrl": "/logos/matchhome-logo.png",
-  "faviconUrl": "/favicon-matchhome.png",
-  "slogan": "¡Seguridad y Confianza En Bienes Raíces!",
-  "agentName": "Julio Marines",
-  "companyUrl": "https://jgcapital.easybroker.com/",
-  "phoneNumber": "(614) 163 6322",
-  "whatsapp": "(614) 163 6322",
-  "email": "jgcapitalbienes@hotmail.com",
-  "address": {
-    "street": "Ave. Francisco Villa # 5700",
-    "city": "Chihuahua",
-    "state": "Chih.",
-    "zipCode": "61203",
-    "country": "México"
-  },
-  "socialMedia": {
-    "facebook": "https://www.facebook.com/matchhomemx",
-    "instagram": "https://www.instagram.com/matchhomemx",
-    "linkedin": "https://www.linkedin.com/company/match-home"
-  }
-};

@@ -32,7 +32,7 @@
 
 
 [data-theme="dark"] {
-  --primary-color: #1f8501;
+  --primary-color: #2d3f63;
   --bg-color: #000000;
   --color: #ddd;
 }
@@ -102,7 +102,8 @@ body{
 h1.title {
   font-size: 2.5em;
   font-weight: 350;
-  color: #ad9c04;
+  color: #6b21a8;
+  text-align: center;
 }
 h1 , h2{
   text-transform: capitalize;
@@ -111,19 +112,23 @@ h1 , h2{
 h2.title {
   font-size: 2em;
   font-weight: 250;
-  color: #ad9c04;
+  color: #6b21a8;
   margin: 0 auto;
+  text-align: center
 }
 
 h3.title {
   font-size: 1.5em;
   font-weight: 200;
-  color: #ad9c04;
+  color: #6b21a8;
+  text-align: center;
+
 }
 h4.title {
   font-size: 1.3em;
   font-weight: 200;
-  color: #ad9c04;
+  color: #6b21a8;
+  text-align: center;  
 }
 h1.name {
   font-size: 2.2em;

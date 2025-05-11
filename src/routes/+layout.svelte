@@ -1,7 +1,5 @@
 <script lang="ts">
   import "../styles/main.css";
-  // import { onDestroy, onMount } from 'svelte';
-  // import { browser } from '$app/environment';
   import { db } from '$lib/firebase';
   import { collection, onSnapshot } from 'firebase/firestore';
   import type { QuerySnapshot, DocumentData } from 'firebase/firestore';
@@ -9,10 +7,7 @@
   import type { Contact, Binnacle, Property } from '$lib/types';
   import {Navbar, Footer} from '$components';
   import NotificationContainer from '$lib/components/NotificationContainer.svelte';
-  // import Footer from '$lib/components/Footer.svelte';
-  // import { initSyncListeners } from '$lib/services/syncService';
 
-  // const { isAuthenticated, checkAuth } = useAuth();
   const unsubscribes: (() => void)[] = [];
 
   // Función para obtener la instancia de Firestore

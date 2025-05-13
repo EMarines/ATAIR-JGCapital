@@ -201,7 +201,7 @@
           binnacle = {"date": Date.now(), "comment": (property.public_id), "to": contact.id, "action": "Propiedad enviada: "}
           infoToBinnacle(binnacle)
           $systStatus = "msgGratitude";
-          commInpuyBinnacle = `Gracias por contactarnos. Enrique Marines, asesor de ventas en ${empresa.companyName}}, tel. ${empresa.phoneNumber}}, email ${empresa.email}.} ✔ Visita matchhome.net ✔ ¡Seguro encuentras algo de interés!`;
+          commInpuyBinnacle = `Gracias por contactarnos. ${empresa.agentName}, asesor de ventas en ${empresa.companyName}}, tel. ${empresa.phoneNumber}}, email ${empresa.email}.} ✔ Visita ${empresa.companyUrl}✔ ¡Seguro encuentras algo de interés!`;
         // Envia mensaje de agradecimiento después de enviar la propiedad en alta de contacto
         } else if($systStatus === "msgGratitude") {
           // Envía en mensaje de agradecimiento
